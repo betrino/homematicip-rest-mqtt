@@ -142,8 +142,10 @@ def update_homematic_device(device_id, value):
             else:
                 logger.error("Invalid command for hoermann drive. Command: " + value)
                 return
+
             result = device.send_door_command(doorCommand=door_command)
             error_code = result["errorCode"]
+
         else:
             logger.error("No updates allowed on devices of type " + str(device_type))
 
@@ -228,6 +230,7 @@ def update_homematic_object(payload):
             "label": payload.label,
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue,
+            "sabotage": payload.sabotage,
             "state": payload.windowState
         }
     elif payload_type == WallMountedThermostatPro:
@@ -263,7 +266,8 @@ def update_homematic_object(payload):
         topic += "devices/hoermanndrive/" + payload.id
         data = {
             "rssi_device_value": payload.rssiDeviceValue,
-            "state": payload.doorState
+            "state": payload.doorState,
+            "light": payload.on
         }
     elif payload_type == MotionDetectorIndoor:
         topic += "devices/motiondetector/" + payload.id
@@ -271,6 +275,7 @@ def update_homematic_object(payload):
             "label": payload.label,
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue,
+            "sabotage": payload.sabotage,
             "current_illumination": payload.currentIllumination,
             "illumination": payload.illumination,
             "motion_detected": payload.motionDetected
@@ -278,14 +283,18 @@ def update_homematic_object(payload):
     elif payload_type == SmokeDetector:
         topic += "devices/smokedetector/" + payload.id
         data = {
+            "label": payload.label,
             "low_battery": payload.lowBat,
-            "rssi_device_value": payload.rssiDeviceValue
+            "rssi_device_value": payload.rssiDeviceValue,
+            "alarm_type": payload.smokeDetectorAlarmType
         }
     elif payload_type == AlarmSirenIndoor:
         topic += "devices/alarmsiren/" + payload.id
         data = {
+            "label": payload.label,
             "low_battery": payload.lowBat,
-            "rssi_device_value": payload.rssiDeviceValue
+            "rssi_device_value": payload.rssiDeviceValue,
+            "sabotage": payload.sabotage
         }
     elif payload_type == Home:
         topic += "home/alarm/" + payload.id
