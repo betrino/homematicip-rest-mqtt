@@ -216,6 +216,7 @@ def update_homematic_object(payload):
         topic += "devices/thermostat/" + payload.id
         data = {
             "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue,
             "set": payload.setPointTemperature,
             "temperature": payload.valveActualTemperature,
             "valve": payload.valvePosition
@@ -224,12 +225,14 @@ def update_homematic_object(payload):
         topic += "devices/window/" + payload.id
         data = {
             "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue,
             "state": payload.windowState
         }
     elif payload_type == WallMountedThermostatPro:
         topic += "devices/wall_thermostat/" + payload.id
         data = {
             "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue,
             "set": payload.setPointTemperature,
             "temperature": payload.actualTemperature,
             "humidity": payload.humidity
@@ -238,6 +241,7 @@ def update_homematic_object(payload):
         topic += "devices/weather/" + payload.id
         data = {
             "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue,
             "temperature": payload.actualTemperature,
             "humidity": payload.humidity,
             "illumination": payload.illumination,
@@ -254,12 +258,14 @@ def update_homematic_object(payload):
     elif payload_type == HoermannDrivesModule:
         topic += "devices/hoermanndrive/" + payload.id
         data = {
+            "rssi_device_value": payload.rssiDeviceValue,
             "state": payload.doorState
         }
     elif payload_type == MotionDetectorIndoor:
         topic += "devices/motiondetector/" + payload.id
         data = {
             "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue,
             "current_illumination": payload.currentIllumination,
             "illumination": payload.illumination,
             "motion_detected": payload.motionDetected
@@ -267,12 +273,14 @@ def update_homematic_object(payload):
     elif payload_type == SmokeDetector:
         topic += "devices/smokedetector/" + payload.id
         data = {
-            "low_battery": payload.lowBat
+            "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue
         }
     elif payload_type == AlarmSirenIndoor:
         topic += "devices/alarmsiren/" + payload.id
         data = {
-            "low_battery": payload.lowBat
+            "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue
         }
     elif payload_type == Home:
         topic += "home/alarm/" + payload.id
