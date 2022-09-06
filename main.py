@@ -215,6 +215,7 @@ def update_homematic_object(payload):
     elif payload_type in (HeatingThermostat, HeatingThermostatCompact):
         topic += "devices/thermostat/" + payload.id
         data = {
+            "label": payload.label,
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue,
             "set": payload.setPointTemperature,
@@ -224,6 +225,7 @@ def update_homematic_object(payload):
     elif payload_type in (ShutterContact, ShutterContactMagnetic, ContactInterface, RotaryHandleSensor):
         topic += "devices/window/" + payload.id
         data = {
+            "label": payload.label,
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue,
             "state": payload.windowState
@@ -231,6 +233,7 @@ def update_homematic_object(payload):
     elif payload_type == WallMountedThermostatPro:
         topic += "devices/wall_thermostat/" + payload.id
         data = {
+            "label": payload.label,
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue,
             "set": payload.setPointTemperature,
@@ -240,6 +243,7 @@ def update_homematic_object(payload):
     elif payload_type == WeatherSensor:
         topic += "devices/weather/" + payload.id
         data = {
+            "label": payload.label,
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue,
             "temperature": payload.actualTemperature,
@@ -264,6 +268,7 @@ def update_homematic_object(payload):
     elif payload_type == MotionDetectorIndoor:
         topic += "devices/motiondetector/" + payload.id
         data = {
+            "label": payload.label,
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue,
             "current_illumination": payload.currentIllumination,
