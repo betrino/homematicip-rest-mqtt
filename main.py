@@ -68,7 +68,7 @@ def on_mqtt_connect(mqtt_client, userdata, flags, rc):
     mqtt_client.subscribe("cmd/homematicip/devices/hoermanndrive/+/state")
 
     # subscribe to topic for changing alarm status
-    mqtt_client.subscribe("cmd/homematicip/home/alarm/+/state")
+    mqtt_client.subscribe("cmd/homematicip/home/+/alarm_state")
 
     logger.debug("Performing initial group sync")
     for group in home.groups:
@@ -102,7 +102,7 @@ def on_mqtt_message(mqtt_client, userdata, msg):
     elif device_or_group == "devices":
         update_homematic_device(id, value)
     elif device_or_group == "home":
-        update_homematic_home(type, value)
+        update_homematic_home(id, value)
     else:
         logger.warning("Updating " + device_or_group + " not yet implemented")
 
@@ -159,7 +159,7 @@ def update_homematic_device(device_id, value):
 def update_homematic_home(type, value):
     try:
         error_code = ''
-        if type == "alarm":
+        if type == "alarm_state":
             if value == 'ABSENCE_MODE':
                 internal_active = True
                 external_active = True
@@ -198,6 +198,17 @@ def on_homematic_events(event_list):
 
         update_homematic_object(payload)
 
+
+def get_alarm_activation_state(payload):
+    internal_active, external_active = payload.get_security_zones_activation()
+    if internal_active and external_active:
+        alarm_activation_state = 'ABSENCE_MODE'
+    elif external_active and not internal_active:
+        alarm_activation_state = 'PRESENCE_MODE'
+    else:
+        alarm_activation_state = 'OFF'
+
+    return alarm_activation_state
 
 def update_homematic_object(payload):
     payload_type = type(payload)
@@ -297,16 +308,11 @@ def update_homematic_object(payload):
             "sabotage": payload.sabotage
         }
     elif payload_type == Home:
-        topic += "home/alarm/" + payload.id
-        internal_active, external_active = payload.get_security_zones_activation()
-        if internal_active and external_active:
-            activation_status = 'ABSENCE_MODE'
-        elif external_active and not internal_active:
-            activation_status = 'PRESENCE_MODE'
-        else:
-            activation_status = 'OFF'
+        topic += "home/" + payload.id
+        weather = payload.weather
         data = {
-            "state": activation_status
+            "alarm_state": get_alarm_activation_state(payload),
+            "temperature": weather.temperature
         }
     else:
         logger.debug("Unhandled type: " + str(payload_type))
