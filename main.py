@@ -312,7 +312,15 @@ def update_homematic_object(payload):
         weather = payload.weather
         data = {
             "alarm_state": get_alarm_activation_state(payload),
-            "temperature": weather.temperature
+            "temperature": weather.temperature,
+            "max_temperature": weather.maxTemperature,
+            "min_temperature": weather.minTemperature,
+            "humidity": weather.humidity,
+            "vapor_amount": weather.vaporAmount,
+            "weather_condition": weather.weatherCondition,
+            "weather_day_time": weather.weatherDayTime,
+            "wind_direction": weather.windDirection,
+            "wind_speed": weather.windSpeed
         }
     else:
         logger.debug("Unhandled type: " + str(payload_type))
