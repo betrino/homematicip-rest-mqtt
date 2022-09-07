@@ -332,7 +332,9 @@ def update_homematic_object(payload):
             "humidity": payload.humidity
         }
     elif payload_type in (HomeControlAccessPoint, MetaGroup, HeatingTemperatureLimiterGroup, SecurityGroup,
-                          SecurityZoneGroup, LinkedSwitchingGroup, HeatingDehumidifierGroup, HumidityWarningRuleGroup):
+                          SecurityZoneGroup, LinkedSwitchingGroup, HeatingDehumidifierGroup, HumidityWarningRuleGroup,
+                          HeatingCoolingDemandBoilerGroup, SwitchingGroup, Group, HeatingCoolingDemandPumpGroup,
+                          AlarmSwitchingGroup, EnvironmentGroup):
         logger.debug("Ignored type: " + str(payload_type))
         return
     else:
