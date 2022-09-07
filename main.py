@@ -327,11 +327,12 @@ def update_homematic_object(payload):
         }
     elif payload_type in (TemperatureHumiditySensorDisplay, TemperatureHumiditySensorWithoutDisplay):
         topic += "devices/sensor/" + payload.id
-        pprint(vars(payload))
         data = {
             "label": payload.label,
             "low_battery": payload.lowBat,
-            "rssi_device_value": payload.rssiDeviceValue
+            "rssi_device_value": payload.rssiDeviceValue,
+            "temperature": payload.actualTemperature,
+            "humidity": payload.humidity
         }
     else:
         logger.debug("Unhandled type: " + str(payload_type))
