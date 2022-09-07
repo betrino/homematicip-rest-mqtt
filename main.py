@@ -331,10 +331,18 @@ def update_homematic_object(payload):
             "temperature": payload.actualTemperature,
             "humidity": payload.humidity
         }
+    elif payload_type == KeyRemoteControlAlarm:
+        topic += "devices/remote/" + payload.id
+        data = {
+            "label": payload.label,
+            "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue
+        }
     elif payload_type in (HomeControlAccessPoint, MetaGroup, HeatingTemperatureLimiterGroup, SecurityGroup,
                           SecurityZoneGroup, LinkedSwitchingGroup, HeatingDehumidifierGroup, HumidityWarningRuleGroup,
                           HeatingCoolingDemandBoilerGroup, SwitchingGroup, Group, HeatingCoolingDemandPumpGroup,
-                          AlarmSwitchingGroup, EnvironmentGroup):
+                          AlarmSwitchingGroup, EnvironmentGroup, HeatingExternalClockGroup, HeatingChangeoverGroup,
+                          InboxGroup, HeatingHumidyLimiterGroup):
         logger.debug("Ignored type: " + str(payload_type))
         return
     else:
