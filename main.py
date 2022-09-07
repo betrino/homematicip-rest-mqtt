@@ -9,9 +9,12 @@ import homematicip
 from homematicip.home import Home
 from homematicip.device import HeatingThermostat, HeatingThermostatCompact, ShutterContact, ShutterContactMagnetic, \
     ContactInterface, RotaryHandleSensor, WallMountedThermostatPro, WeatherSensor, HoermannDrivesModule, \
-    MotionDetectorIndoor, SmokeDetector, AlarmSirenIndoor
+    MotionDetectorIndoor, SmokeDetector, AlarmSirenIndoor, TemperatureHumiditySensorWithoutDisplay, \
+    TemperatureHumiditySensorDisplay
 from homematicip.group import HeatingGroup
 from homematicip.base.enums import DoorCommand
+
+from pprint import pprint
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -322,8 +325,17 @@ def update_homematic_object(payload):
             "wind_direction": weather.windDirection,
             "wind_speed": weather.windSpeed
         }
+    elif payload_type in (TemperatureHumiditySensorDisplay, TemperatureHumiditySensorWithoutDisplay):
+        topic += "devices/sensor/" + payload.id
+        pprint(vars(payload))
+        data = {
+            "label": payload.label,
+            "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue
+        }
     else:
         logger.debug("Unhandled type: " + str(payload_type))
+        pprint(vars(payload))
         return
 
     for k, v in data.items():
