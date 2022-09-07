@@ -8,7 +8,7 @@ import paho.mqtt.client as mqtt
 import homematicip
 from homematicip.home import Home
 from homematicip.device import *
-from homematicip.group import HeatingGroup
+from homematicip.group import *
 from homematicip.base.enums import DoorCommand
 
 from pprint import pprint
@@ -331,8 +331,10 @@ def update_homematic_object(payload):
             "temperature": payload.actualTemperature,
             "humidity": payload.humidity
         }
-    elif payload_type == HomeControlAccessPoint:
-        pprint(vars(payload))
+    elif payload_type in (HomeControlAccessPoint, MetaGroup, HeatingTemperatureLimiterGroup, SecurityGroup,
+                          SecurityZoneGroup, LinkedSwitchingGroup, HeatingDehumidifierGroup, HumidityWarningRuleGroup):
+        logger.debug("Ignored type: " + str(payload_type))
+        return
     else:
         logger.info("Unhandled type: " + str(payload_type))
         return
