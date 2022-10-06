@@ -338,6 +338,25 @@ def update_homematic_object(payload):
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue
         }
+    elif payload_type == FullFlushSwitchMeasuring:
+        pprint(payload.__dict__)
+        topic += "devices/switchmeasuring/" + payload.id
+        data = {
+            "label": payload.label,
+            "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue,
+            "on": payload.on,
+            "current_power_consumption": payload.currentPowerConsumption
+        }
+    elif payload_type == WaterSensor:
+        topic += "devices/watersensor/" + payload.id
+        data = {
+            "label": payload.label,
+            "low_battery": payload.lowBat,
+            "rssi_device_value": payload.rssiDeviceValue,
+            "moisture_detected": payload.moistureDetected,
+            "incorrect_positioned": payload.incorrectPositioned
+        }
     elif payload_type in (HomeControlAccessPoint, MetaGroup, HeatingTemperatureLimiterGroup, SecurityGroup,
                           SecurityZoneGroup, LinkedSwitchingGroup, HeatingDehumidifierGroup, HumidityWarningRuleGroup,
                           HeatingCoolingDemandBoilerGroup, SwitchingGroup, Group, HeatingCoolingDemandPumpGroup,
