@@ -339,14 +339,14 @@ def update_homematic_object(payload):
             "rssi_device_value": payload.rssiDeviceValue
         }
     elif payload_type == FullFlushSwitchMeasuring:
-        pprint(payload.__dict__)
         topic += "devices/switchmeasuring/" + payload.id
         data = {
             "label": payload.label,
             "low_battery": payload.lowBat,
             "rssi_device_value": payload.rssiDeviceValue,
             "on": payload.on,
-            "current_power_consumption": payload.currentPowerConsumption
+            "current_power_consumption": payload.currentPowerConsumption,
+            "energy_counter": payload.energyCounter
         }
     elif payload_type == WaterSensor:
         topic += "devices/watersensor/" + payload.id
