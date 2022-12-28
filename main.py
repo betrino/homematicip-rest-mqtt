@@ -357,6 +357,27 @@ def update_homematic_object(payload):
             "moisture_detected": payload.moistureDetected,
             "incorrect_positioned": payload.incorrectPositioned
         }
+    elif payload_type in (FloorTerminalBlock6, FloorTerminalBlock10):
+        topic += "devices/floorterminalblock/" + payload.id
+
+        valvePositions = {}
+        for channel in payload.functionalChannels:
+            pprint(channel._rawJSONData)
+            json_data = channel._rawJSONData
+            if "valvePosition" in json_data:
+                channel_data = {
+                    "label": json_data["label"],
+                    "valvePosition": json_data["valvePosition"]
+                }
+                valvePositions[json_data["index"]] = channel_data
+
+        data = {
+            "label": payload.label,
+            "rssi_device_value": payload.rssiDeviceValue,
+            "valvePositions": valvePositions
+        }
+        pprint(data)
+
     elif payload_type in (HomeControlAccessPoint, MetaGroup, HeatingTemperatureLimiterGroup, SecurityGroup,
                           SecurityZoneGroup, LinkedSwitchingGroup, HeatingDehumidifierGroup, HumidityWarningRuleGroup,
                           HeatingCoolingDemandBoilerGroup, SwitchingGroup, Group, HeatingCoolingDemandPumpGroup,
@@ -372,7 +393,7 @@ def update_homematic_object(payload):
         full_topic = topic + "/" + k
         logger.debug("Publishing to %s: %s", full_topic, v)
         if not args.no_publish:
-            client.publish(full_topic, v, qos=0, retain=True)
+            client.publish(full_topic, json.dumps(v), qos=0, retain=True)
 
 
 if __name__ == "__main__":
