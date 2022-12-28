@@ -376,7 +376,6 @@ def update_homematic_object(payload):
             "rssi_device_value": payload.rssiDeviceValue,
             "valvePositions": valvePositions
         }
-        pprint(data)
 
     elif payload_type in (HomeControlAccessPoint, MetaGroup, HeatingTemperatureLimiterGroup, SecurityGroup,
                           SecurityZoneGroup, LinkedSwitchingGroup, HeatingDehumidifierGroup, HumidityWarningRuleGroup,
